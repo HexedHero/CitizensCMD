@@ -125,7 +125,8 @@ public final class CitizensCMD extends JavaPlugin {
         Metrics metrics = new Metrics(this, 2652);
         Util.setUpMetrics(metrics, settings);
 
-        console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund")));
+        console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion())));
+        console.sendMessage(TAG.append(LEGACY.deserialize("&8by &3Mateus Moreira &c@LichtHund &8& Maintained by &3HexedHero")));
 
         permissionsManager = new PermissionsManager(this);
 

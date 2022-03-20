@@ -7,7 +7,7 @@
 main: me.mattstudios.citizenscmd.CitizensCMD
 version: ${project.version}
 name: CitizensCMD
-author: Mateus Moreira
+authors: [Mateus Moreira, HexedHero]
 softdepend: [Citizens, PlaceholderAPI, Vault]
 api-version: 1.13
 

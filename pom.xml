@@ -5,13 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.mattstudios.plugins</groupId>
-    <artifactId>citizens-cmd</artifactId>
+    <artifactId>CitizensCMD</artifactId>
     <version>2.5.1</version>
     <packaging>jar</packaging>
 
-    <name>CitizensCMD</name>
-
-    <description>citizens-cmd</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.18.2-R0.1-SNAPSHOT</spigot.version>

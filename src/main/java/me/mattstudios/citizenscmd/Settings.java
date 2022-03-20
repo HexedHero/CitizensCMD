@@ -46,9 +46,8 @@ public final class Settings implements SettingsHolder {
     public void registerComments(final CommentsConfiguration conf) {
         conf.setComment(
                 "",
-                "Citizens CMD Plugin by Mateus Moreira",
-                "@LichtHund",
-                "Version ${project.version}",
+                "CitizensCMD Plugin",
+                "by Mateus Moreira @LichtHund & Maintained by HexedHero",
                 "Wiki: https://github.com/HexedHero/CitizensCMD/wiki",
                 "GitHub: https://github.com/HexedHero/CitizensCMD",
                 "Spigot: https://www.spigotmc.org/resources/30224/",
