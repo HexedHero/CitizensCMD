@@ -46,6 +46,7 @@ import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
 import me.mattstudios.citizenscmd.utility.Messages;
+import me.mattstudios.citizenscmd.utility.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -53,6 +54,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.milkbowl.vault.economy.Economy;
+
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -71,7 +74,6 @@ import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
 import static me.mattstudios.citizenscmd.utility.Util.TAG;
 import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.disablePlugin;
 import static me.mattstudios.citizenscmd.utility.Util.info;
 
 public final class CitizensCMD extends JavaPlugin {
@@ -107,20 +109,22 @@ public final class CitizensCMD extends JavaPlugin {
                 .create();
 
         audiences = BukkitAudiences.create(this);
+        final Audience console = audiences.console();
 
         setLang(settings.getProperty(Settings.LANG));
 
         if (!hasCitizens() && settings.getProperty(Settings.CITIZENS_CHECK)) {
-            disablePlugin(this);
+            console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens &7is needed for this plugin to work!")));
+            console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens.jar &7is not installed on the server!")));
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
         commandManager = BukkitCommandManager.create(this);
 
-        //Metrics metrics = new Metrics(this);
-        //Util.setUpMetrics(metrics, settings);
+        Metrics metrics = new Metrics(this, 2652);
+        Util.setUpMetrics(metrics, settings);
 
-        final Audience console = audiences.console();
         console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund")));
 
         permissionsManager = new PermissionsManager(this);

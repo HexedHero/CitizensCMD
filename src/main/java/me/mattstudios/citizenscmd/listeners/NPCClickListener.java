@@ -279,7 +279,7 @@ public class NPCClickListener implements Listener {
 
                         final Audience audience = plugin.getAudiences().player(player);
 
-                        if (plugin.getSettings().getProperty(Settings.MINI_MESSAGE)) {
+                        if (plugin.getSettings().getProperty(Settings.MINIMESSAGE)) {
                             audience.sendMessage(MINI.deserialize(finalMessage));
                             return;
                         }

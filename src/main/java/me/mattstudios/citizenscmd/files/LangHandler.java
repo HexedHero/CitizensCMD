@@ -38,7 +38,6 @@ import java.util.Objects;
 import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
 import static me.mattstudios.citizenscmd.utility.Util.MINI;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class LangHandler {
 
     private final CitizensCMD plugin;
@@ -99,7 +98,7 @@ public class LangHandler {
             value = value.replace(entry.getKey(), entry.getValue());
         }
 
-        if (settings.getProperty(Settings.MINI_MESSAGE_LANG)) return MINI.deserialize(value);
+        if (settings.getProperty(Settings.MINIMESSAGE_LANG)) return MINI.deserialize(value);
         return LEGACY.deserialize(value);
     }
 

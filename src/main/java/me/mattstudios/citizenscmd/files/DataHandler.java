@@ -72,7 +72,6 @@ public class DataHandler {
     /**
      * Creates files and folders
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createBasics() {
         if (!dir.exists()) dir.mkdirs();
 
@@ -391,7 +390,6 @@ public class DataHandler {
      * @param npc The NPC ID.
      * @return True or false depending if it has or not.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasNPCData(int npc) {
         for (String key : data.keySet()) {
             if (key.contains("npc-" + npc)) return true;

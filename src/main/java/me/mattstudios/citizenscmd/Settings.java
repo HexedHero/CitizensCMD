@@ -19,11 +19,11 @@ public final class Settings implements SettingsHolder {
             .newProperty("lang", "EN");
 
     @Comment({"", "Toggle this on to enable using Minimessage style for message commands.", "https://docs.adventure.kyori.net/minimessage/format.html"})
-    public static final Property<Boolean> MINI_MESSAGE = PropertyInitializer
+    public static final Property<Boolean> MINIMESSAGE = PropertyInitializer
             .newProperty("minimessage", false);
 
     @Comment({"", "Toggle this on to enable using Minimessage style for your language files.", "https://docs.adventure.kyori.net/minimessage/format.html"})
-    public static final Property<Boolean> MINI_MESSAGE_LANG = PropertyInitializer
+    public static final Property<Boolean> MINIMESSAGE_LANG = PropertyInitializer
             .newProperty("minimessage-lang", false);
 
     @Comment({"", "The default npc cooldown in seconds"})
@@ -49,9 +49,9 @@ public final class Settings implements SettingsHolder {
                 "Citizens CMD Plugin by Mateus Moreira",
                 "@LichtHund",
                 "Version ${project.version}",
-                "Wiki: https://github.com/ipsk/CitizensCMD/wiki",
-                "GitHub: https://github.com/ipsk/CitizensCMD",
-                "Spigot: https://www.spigotmc.org/resources/citizens-cmd.30224/",
+                "Wiki: https://github.com/HexedHero/CitizensCMD/wiki",
+                "GitHub: https://github.com/HexedHero/CitizensCMD",
+                "Spigot: https://www.spigotmc.org/resources/30224/",
                 ""
         );
     }

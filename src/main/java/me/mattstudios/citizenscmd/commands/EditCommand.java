@@ -3,7 +3,6 @@ package me.mattstudios.citizenscmd.commands;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
-import jdk.internal.joptsimple.internal.Strings;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
@@ -115,7 +114,7 @@ public class EditCommand extends Npcmd {
                 return;
         }
 
-        String finalString = Strings.join(arguments, " ").trim();
+        String finalString = String.join(" ", arguments).trim();
         if (finalString.startsWith("/")) finalString = finalString.substring(1);
 
         plugin.getDataHandler().edit(selectedNpc.getAsInt(), id, click, type, finalString, audience);

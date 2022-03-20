@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -160,19 +159,6 @@ public class Util {
      */
     public static long getSecondsDifference(long storedTime) {
         return TimeUnit.SECONDS.convert((System.currentTimeMillis() - storedTime), TimeUnit.MILLISECONDS);
-    }
-
-    /**
-     * Disables the plugin if Citizens is not present.
-     *
-     * @param plugin The plugin to disable.
-     */
-    public static void disablePlugin(CitizensCMD plugin) {
-        final Logger logger = plugin.getLogger();
-        logger.info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
-        logger.info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
-        logger.info(color(TAG + "&cDisabling CitizensCMD..."));
-        Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }
 
     /**

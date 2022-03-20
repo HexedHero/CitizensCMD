@@ -64,7 +64,6 @@ public class CooldownHandler {
     /**
      * Creates files and folders
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createBasics() {
         if (!dir.exists()) dir.mkdirs();
 
