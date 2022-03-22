@@ -117,7 +117,7 @@ public class Util {
                 case "pt":
                     return "Portuguese";
 
-                case "Ro":
+                case "ro":
                     return "Romanian";
 
                 case "ch":
