@@ -6,7 +6,7 @@ public class CitizensCMDAPI {
 
     private final DataHandler dataHandler;
 
-    public CitizensCMDAPI (DataHandler dataHandler) {
+    public CitizensCMDAPI(DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
