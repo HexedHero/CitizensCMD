@@ -47,7 +47,7 @@ public class ReloadCommand extends Npcmd {
         }
 
         if (CitizensCMD.getEconomy() != null) {
-            plugin.setShift(settings.getProperty(Settings.SHIT_CONFIRM));
+            plugin.setShift(settings.getProperty(Settings.SHIFT_CONFIRM));
         }
 
         plugin.getDataHandler().reload();

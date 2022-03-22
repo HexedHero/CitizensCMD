@@ -152,7 +152,7 @@ public final class CitizensCMD extends JavaPlugin {
 
         waitingList = new HashMap<>();
 
-        setShift(settings.getProperty(Settings.SHIT_CONFIRM));
+        setShift(settings.getProperty(Settings.SHIFT_CONFIRM));
 
         switch (settings.getProperty(Settings.TIME_DISPLAY).toLowerCase()) {
             case "short":
@@ -284,7 +284,7 @@ public final class CitizensCMD extends JavaPlugin {
             return false;
         }
         economy = registeredServiceProvider.getProvider();
-        shift = settings.getProperty(Settings.SHIT_CONFIRM);
+        shift = settings.getProperty(Settings.SHIFT_CONFIRM);
         return economy != null;
     }
 

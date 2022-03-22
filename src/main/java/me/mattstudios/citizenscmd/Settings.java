@@ -26,7 +26,7 @@ public final class Settings implements SettingsHolder {
     public static final Property<Integer> DEFAULT_COOLDOWN = PropertyInitializer.newProperty("default-cooldown", 0);
 
     @Comment({"", "When using a NPC with price, true means that to confirm the use the player needs to seek or press shift"})
-    public static final Property<Boolean> SHIT_CONFIRM = PropertyInitializer.newProperty("shift-confirm", true);
+    public static final Property<Boolean> SHIFT_CONFIRM = PropertyInitializer.newProperty("shift-confirm", true);
 
     @Comment({"", "Select cooldown display format, SHORT = 3m 3s | MEDIUM = 3 min 3 sec | FULL - 3 minutes 3 seconds"})
     public static final Property<String> TIME_DISPLAY = PropertyInitializer.newProperty("cooldown-time-display", "MEDIUM");
