@@ -18,6 +18,27 @@
 
 package me.mattstudios.citizenscmd;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
+import static me.mattstudios.citizenscmd.utility.Util.TAG;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.info;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -54,27 +75,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.milkbowl.vault.economy.Economy;
-
-import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
-import static me.mattstudios.citizenscmd.utility.Util.TAG;
-import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.info;
 
 public final class CitizensCMD extends JavaPlugin {
 
@@ -122,7 +122,7 @@ public final class CitizensCMD extends JavaPlugin {
 
         commandManager = BukkitCommandManager.create(this);
 
-        Metrics metrics = new Metrics(this, 2652);
+        final Metrics metrics = new Metrics(this, 2652);
         Util.setUpMetrics(metrics, settings);
 
         console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion())));
@@ -169,7 +169,7 @@ public final class CitizensCMD extends JavaPlugin {
         }
 
         if (settings.getProperty(Settings.CHECK_UPDATES)) {
-            SpigotUpdater updater = new SpigotUpdater(this, 30224);
+            final SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
                 // If there's an update, tell the user that they can update
                 if (updater.checkForUpdates()) {
@@ -178,7 +178,7 @@ public final class CitizensCMD extends JavaPlugin {
                     console.sendMessage(TAG.append(lang.getMessage(Messages.STARTUP_NEW_VERSION).style(Style.style(NamedTextColor.AQUA, TextDecoration.ITALIC))));
                     console.sendMessage(TAG.append(Component.text(updater.getResourceURL()).style(Style.style(NamedTextColor.AQUA, TextDecoration.ITALIC))));
                 }
-            } catch (Exception ignored) {
+            } catch (final Exception ignored) {
             }
         }
 
@@ -252,20 +252,20 @@ public final class CitizensCMD extends JavaPlugin {
                 new PriceCommand(this),
                 new ReloadCommand(this),
                 new RemoveCommand(this)
-        ).forEach(commandManager::registerCommand);
+                ).forEach(commandManager::registerCommand);
     }
 
     /**
      * Registers all the events to be used
      */
     private void registerEvents() {
-        PluginManager pm = getServer().getPluginManager();
+        final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new UpdateEvent(this), this);
         pm.registerEvents(new NPCClickListener(this), this);
 
         try {
             pm.registerEvents(new NPCListener(this), this);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             info(color("&cCould not register clone event, please update your Citizens."));
         }
     }
@@ -279,7 +279,7 @@ public final class CitizensCMD extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-        RegisteredServiceProvider<Economy> registeredServiceProvider = getServer().getServicesManager().getRegistration(Economy.class);
+        final RegisteredServiceProvider<Economy> registeredServiceProvider = getServer().getServicesManager().getRegistration(Economy.class);
         if (registeredServiceProvider == null) {
             return false;
         }

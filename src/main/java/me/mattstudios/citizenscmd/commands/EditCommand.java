@@ -1,5 +1,14 @@
 package me.mattstudios.citizenscmd.commands;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
+
+import java.util.List;
+import java.util.OptionalInt;
+
+import org.bukkit.command.CommandSender;
+
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
@@ -7,14 +16,6 @@ import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
-
-import java.util.List;
-import java.util.OptionalInt;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
 public class EditCommand extends Npcmd {
 
@@ -32,7 +33,7 @@ public class EditCommand extends Npcmd {
             @Suggestion("click") final String clickString,
             final int id,
             final List<String> arguments
-    ) {
+            ) {
         final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
         final Audience audience = plugin.getAudiences().sender(sender);
@@ -68,10 +69,10 @@ public class EditCommand extends Npcmd {
 
         switch (clickString.toLowerCase()) {
             case "left":
-                int leftCommandSize = plugin.getDataHandler().getClickCommandsData(
+                final int leftCommandSize = plugin.getDataHandler().getClickCommandsData(
                         selectedNpc.getAsInt(),
                         EnumTypes.ClickType.LEFT
-                ).size();
+                        ).size();
 
                 if (leftCommandSize == 0) {
                     audience.sendMessage(HEADER);
@@ -89,10 +90,10 @@ public class EditCommand extends Npcmd {
                 break;
 
             case "right":
-                int rightCommandSize = plugin.getDataHandler().getClickCommandsData(
+                final int rightCommandSize = plugin.getDataHandler().getClickCommandsData(
                         selectedNpc.getAsInt(),
                         EnumTypes.ClickType.RIGHT
-                ).size();
+                        ).size();
 
                 if (rightCommandSize == 0) {
                     audience.sendMessage(HEADER);
@@ -115,7 +116,9 @@ public class EditCommand extends Npcmd {
         }
 
         String finalString = String.join(" ", arguments).trim();
-        if (finalString.startsWith("/")) finalString = finalString.substring(1);
+        if (finalString.startsWith("/")) {
+            finalString = finalString.substring(1);
+        }
 
         plugin.getDataHandler().edit(selectedNpc.getAsInt(), id, click, type, finalString, audience);
     }

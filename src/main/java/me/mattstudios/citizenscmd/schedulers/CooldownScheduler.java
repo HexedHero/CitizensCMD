@@ -18,8 +18,9 @@
 
 package me.mattstudios.citizenscmd.schedulers;
 
-import me.mattstudios.citizenscmd.CitizensCMD;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import me.mattstudios.citizenscmd.CitizensCMD;
 
 public class CooldownScheduler extends BukkitRunnable {
 

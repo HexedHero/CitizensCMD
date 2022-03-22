@@ -1,5 +1,14 @@
 package me.mattstudios.citizenscmd.commands;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
+
+import java.util.Optional;
+import java.util.OptionalInt;
+
+import org.bukkit.command.CommandSender;
+
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.CommandFlags;
 import dev.triumphteam.cmd.core.annotation.Flag;
@@ -9,14 +18,6 @@ import dev.triumphteam.cmd.core.flag.Flags;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
-
-import java.util.Optional;
-import java.util.OptionalInt;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
 public class AddCommand extends Npcmd {
 
@@ -29,15 +30,15 @@ public class AddCommand extends Npcmd {
     @SubCommand("add")
     @Permission("citizenscmd.add")
     @CommandFlags({
-            @Flag(flag = "n"),
-            @Flag(flag = "l"),
-            @Flag(flag = "d", argument = double.class)
+        @Flag(flag = "n"),
+        @Flag(flag = "l"),
+        @Flag(flag = "d", argument = double.class)
     })
     public void addCommand(
             final CommandSender sender,
             @Suggestion("permissions") final String permission,
             final Flags flags
-    ) {
+            ) {
         final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
         final Audience audience = plugin.getAudiences().sender(sender);
@@ -69,8 +70,8 @@ public class AddCommand extends Npcmd {
         final String finalString = (flags.hasFlag("n") ? "{display} " + command : command).trim();
 
         plugin
-                .getDataHandler()
-                .addCommand(selectedNpc.getAsInt(), permissionBuilder.toString(), finalString, audience, flags.hasFlag("l"));
+        .getDataHandler()
+        .addCommand(selectedNpc.getAsInt(), permissionBuilder.toString(), finalString, audience, flags.hasFlag("l"));
     }
 
 }

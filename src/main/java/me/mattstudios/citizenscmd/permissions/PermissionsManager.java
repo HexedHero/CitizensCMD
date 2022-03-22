@@ -19,17 +19,18 @@
 package me.mattstudios.citizenscmd.permissions;
 
 
-import me.mattstudios.citizenscmd.CitizensCMD;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
-
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
+
+import me.mattstudios.citizenscmd.CitizensCMD;
+
 public class PermissionsManager {
 
-    private HashMap<UUID, PermissionAttachment> permissionsData;
-    private CitizensCMD plugin;
+    private final HashMap<UUID, PermissionAttachment> permissionsData;
+    private final CitizensCMD plugin;
 
     public PermissionsManager(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -43,9 +44,9 @@ public class PermissionsManager {
      * @param permission The permission node
      */
     public void setPermission(Player player, String permission) {
-        PermissionAttachment permissionAttachment = player.addAttachment(plugin);
+        final PermissionAttachment permissionAttachment = player.addAttachment(plugin);
         permissionsData.put(player.getUniqueId(), permissionAttachment);
-        PermissionAttachment permissionAttachment1 = permissionsData.get(player.getUniqueId());
+        final PermissionAttachment permissionAttachment1 = permissionsData.get(player.getUniqueId());
         permissionAttachment1.setPermission(permission, true);
     }
 

@@ -18,7 +18,28 @@
 
 package me.mattstudios.citizenscmd.listeners;
 
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
+import static me.mattstudios.citizenscmd.utility.Util.MINI;
+import static me.mattstudios.citizenscmd.utility.Util.getFormattedTime;
+import static org.bukkit.Bukkit.getScheduler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+
 import com.google.common.primitives.Floats;
+
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.Settings;
@@ -32,25 +53,6 @@ import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
-import static me.mattstudios.citizenscmd.utility.Util.MINI;
-import static me.mattstudios.citizenscmd.utility.Util.getFormattedTime;
-import static org.bukkit.Bukkit.getScheduler;
 
 public class NPCClickListener implements Listener {
 
@@ -67,14 +69,18 @@ public class NPCClickListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRightClick(NPCRightClickEvent event) {
-        NPC npc = event.getNPC();
-        Player player = event.getClicker();
+        final NPC npc = event.getNPC();
+        final Player player = event.getClicker();
         final Audience audience = plugin.getAudiences().player(player);
 
-        if (!player.hasPermission("citizenscmd.use")) return;
+        if (!player.hasPermission("citizenscmd.use")) {
+            return;
+        }
 
         if (plugin.getDataHandler().hasCustomPermission(npc.getId())) {
-            if (!player.hasPermission(plugin.getDataHandler().getCustomPermission(npc.getId()))) return;
+            if (!player.hasPermission(plugin.getDataHandler().getCustomPermission(npc.getId()))) {
+                return;
+            }
         }
 
         if (!plugin.getWaitingList().containsKey(player.getUniqueId() + "." + npc.getId())) {
@@ -93,10 +99,12 @@ public class NPCClickListener implements Listener {
                 }
             }
 
-            if (plugin.getDataHandler().hasNoCommands(npc.getId(), EnumTypes.ClickType.RIGHT)) return;
+            if (plugin.getDataHandler().hasNoCommands(npc.getId(), EnumTypes.ClickType.RIGHT)) {
+                return;
+            }
         }
 
-        double price = plugin.getDataHandler().getPrice(npc.getId());
+        final double price = plugin.getDataHandler().getPrice(npc.getId());
 
         if (price > 0.0) {
             if (CitizensCMD.getEconomy() != null) {
@@ -105,8 +113,11 @@ public class NPCClickListener implements Listener {
                     final Map<String, String> replacements = new HashMap<>();
                     replacements.put("{price}", String.valueOf(price));
 
-                    if (!plugin.isShift()) replacements.put("{shift}", "");
-                    else replacements.put("{shift}", "Shift ");
+                    if (!plugin.isShift()) {
+                        replacements.put("{shift}", "");
+                    } else {
+                        replacements.put("{shift}", "Shift ");
+                    }
 
                     final Component messageConfirm = plugin.getLang().getMessage(Messages.PAY_CONFIRM, replacements);
 
@@ -141,14 +152,18 @@ public class NPCClickListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeftClick(NPCLeftClickEvent event) {
-        NPC npc = event.getNPC();
-        Player player = event.getClicker();
+        final NPC npc = event.getNPC();
+        final Player player = event.getClicker();
         final Audience audience = plugin.getAudiences().player(player);
 
-        if (!player.hasPermission("citizenscmd.use")) return;
+        if (!player.hasPermission("citizenscmd.use")) {
+            return;
+        }
 
         if (plugin.getDataHandler().hasCustomPermission(npc.getId())) {
-            if (!player.hasPermission(plugin.getDataHandler().getCustomPermission(npc.getId()))) return;
+            if (!player.hasPermission(plugin.getDataHandler().getCustomPermission(npc.getId()))) {
+                return;
+            }
         }
 
         if (!plugin.getWaitingList().containsKey(player.getUniqueId() + "." + npc.getId())) {
@@ -168,10 +183,12 @@ public class NPCClickListener implements Listener {
                 }
             }
 
-            if (plugin.getDataHandler().hasNoCommands(npc.getId(), EnumTypes.ClickType.LEFT)) return;
+            if (plugin.getDataHandler().hasNoCommands(npc.getId(), EnumTypes.ClickType.LEFT)) {
+                return;
+            }
         }
 
-        double price = plugin.getDataHandler().getPrice(npc.getId());
+        final double price = plugin.getDataHandler().getPrice(npc.getId());
 
         if (price > 0.0) {
             if (CitizensCMD.getEconomy() != null) {
@@ -180,8 +197,11 @@ public class NPCClickListener implements Listener {
                     final Map<String, String> replacements = new HashMap<>();
                     replacements.put("{price}", String.valueOf(price));
 
-                    if (!plugin.isShift()) replacements.put("{shift}", "");
-                    else replacements.put("{shift}", "Shift ");
+                    if (!plugin.isShift()) {
+                        replacements.put("{shift}", "");
+                    } else {
+                        replacements.put("{shift}", "Shift ");
+                    }
 
                     final Component messageConfirm = plugin.getLang().getMessage(Messages.PAY_CONFIRM, replacements);
 
@@ -191,7 +211,9 @@ public class NPCClickListener implements Listener {
                     return;
                 }
 
-                if (plugin.isShift() && !player.isSneaking()) return;
+                if (plugin.isShift() && !player.isSneaking()) {
+                    return;
+                }
 
                 plugin.getWaitingList().remove(player.getUniqueId() + "." + npc.getId());
                 audience.sendMessage(plugin.getLang().getMessage(Messages.PAY_CANCELED));
@@ -208,7 +230,9 @@ public class NPCClickListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRemoveNPC(NPCRemoveEvent event) {
-        if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) return;
+        if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) {
+            return;
+        }
 
         plugin.getDataHandler().removeNPCData(event.getNPC().getId());
     }
@@ -221,11 +245,11 @@ public class NPCClickListener implements Listener {
      * @param clickType The type of click, either left or right.
      */
     private void doCommands(NPC npc, Player player, EnumTypes.ClickType clickType) {
-        List<String> permissions = new ArrayList<>();
-        List<String> commands = new ArrayList<>();
+        final List<String> permissions = new ArrayList<>();
+        final List<String> commands = new ArrayList<>();
 
-        for (String list : plugin.getDataHandler().getClickCommandsData(npc.getId(), clickType)) {
-            Matcher matcher = MAIN_PATTERN.matcher(list);
+        for (final String list : plugin.getDataHandler().getClickCommandsData(npc.getId(), clickType)) {
+            final Matcher matcher = MAIN_PATTERN.matcher(list);
             if (matcher.find()) {
 
                 permissions.add(matcher.group(1));
@@ -242,22 +266,24 @@ public class NPCClickListener implements Listener {
             }
         }
 
-        if (permissions.size() != commands.size()) return;
+        if (permissions.size() != commands.size()) {
+            return;
+        }
 
         for (int i = 0; i < permissions.size(); i++) {
 
             double delay = 0;
 
             if (permissions.get(i).contains("(")) {
-                Matcher matcher = PERMISSION_PATTERN.matcher(permissions.get(i));
+                final Matcher matcher = PERMISSION_PATTERN.matcher(permissions.get(i));
                 if (matcher.find()) {
                     delay = Double.parseDouble(matcher.group(2));
-                    String permission = matcher.group(1);
+                    final String permission = matcher.group(1);
                     permissions.set(i, permission);
                 }
             }
 
-            int finalI = i;
+            final int finalI = i;
             switch (permissions.get(i).toLowerCase()) {
                 case "console":
                     getScheduler().runTaskLater(plugin, () -> plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commands.get(finalI)), (int) delay * 20);
@@ -299,17 +325,21 @@ public class NPCClickListener implements Listener {
                         if (matcher.find()) {
                             sound = matcher.group("sound");
 
-                            String volumeString = matcher.group("volume");
-                            String pitchString = matcher.group("pitch");
+                            final String volumeString = matcher.group("volume");
+                            final String pitchString = matcher.group("pitch");
 
                             if (volumeString != null) {
                                 final Float nullableVolume = Floats.tryParse(volumeString);
-                                if (nullableVolume != null) volume = nullableVolume;
+                                if (nullableVolume != null) {
+                                    volume = nullableVolume;
+                                }
                             }
 
                             if (pitchString != null) {
                                 final Float nullablePitch = Floats.tryParse(pitchString);
-                                if (nullablePitch != null) volume = nullablePitch;
+                                if (nullablePitch != null) {
+                                    volume = nullablePitch;
+                                }
                             }
                         }
 

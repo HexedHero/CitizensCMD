@@ -18,15 +18,9 @@
 
 package me.mattstudios.citizenscmd.files;
 
-import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.EnumTypes;
-import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.citizenscmd.utility.Util;
-import net.kyori.adventure.audience.Audience;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.info;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,9 +31,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.info;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.utility.EnumTypes;
+import me.mattstudios.citizenscmd.utility.Messages;
+import me.mattstudios.citizenscmd.utility.Util;
+import net.kyori.adventure.audience.Audience;
 
 @SuppressWarnings("unchecked")
 public class DataHandler {
@@ -60,7 +61,7 @@ public class DataHandler {
      * Creates file and folder
      */
     public void initialize() {
-        File pluginFolder = plugin.getDataFolder();
+        final File pluginFolder = plugin.getDataFolder();
         dir = new File(pluginFolder + "/data");
         savesFile = new File(dir.getPath(), "saves.yml");
         dataConfigurator = new YamlConfiguration();
@@ -73,12 +74,14 @@ public class DataHandler {
      * Creates files and folders
      */
     private void createBasics() {
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
 
         if (!savesFile.exists()) {
             try {
                 savesFile.createNewFile();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 info(color("&cError creating saves file.."));
             }
         }
@@ -92,10 +95,12 @@ public class DataHandler {
             try {
                 dataConfigurator.load(savesFile);
 
-                if (!dataConfigurator.contains("npc-data")) return;
+                if (!dataConfigurator.contains("npc-data")) {
+                    return;
+                }
 
-                for (String parent : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data")).getKeys(false)) {
-                    for (String child : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data." + parent)).getKeys(false)) {
+                for (final String parent : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data")).getKeys(false)) {
+                    for (final String child : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data." + parent)).getKeys(false)) {
                         switch (child.toLowerCase()) {
                             case "permission":
                                 data.put("npc-data." + parent + "." + child, dataConfigurator.getString("npc-data." + parent + "." + child));
@@ -140,27 +145,32 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
-                List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
+                final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
+                final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
 
                 if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
                     data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
                     dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
                 }
 
-                if (left) commandListLeft.add("[" + permission + "] " + command);
-                else commandList.add("[" + permission + "] " + command);
+                if (left) {
+                    commandListLeft.add("[" + permission + "] " + command);
+                } else {
+                    commandList.add("[" + permission + "] " + command);
+                }
 
-                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands"))
+                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
                     data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                else
+                } else {
                     data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
+                }
                 dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
 
-                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands"))
+                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
                     data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                else
+                } else {
                     data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+                }
                 dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
 
                 if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
@@ -193,27 +203,32 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
-                List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
+                final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
+                final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
 
                 if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
                     data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
                     dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
                 }
 
-                if (left) commandListLeft.add("[" + permission + "] " + command);
-                else commandList.add("[" + permission + "] " + command);
+                if (left) {
+                    commandListLeft.add("[" + permission + "] " + command);
+                } else {
+                    commandList.add("[" + permission + "] " + command);
+                }
 
-                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands"))
+                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
                     data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                else
+                } else {
                     data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
+                }
                 dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
 
-                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands"))
+                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
                     data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                else
+                } else {
                     data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+                }
                 dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
 
                 if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
@@ -321,8 +336,9 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                if (dataConfigurator.contains("npc-data.npc-" + npc + ".permission"))
+                if (dataConfigurator.contains("npc-data.npc-" + npc + ".permission")) {
                     dataConfigurator.set("npc-data.npc-" + npc + ".permission", null);
+                }
 
                 data.remove("npc-data.npc-" + npc + ".permission");
 
@@ -363,10 +379,11 @@ public class DataHandler {
      * @return Returns arrays with strings to show on tab completion event
      */
     public String[] getCompleteCommandsNumbers(int npc, EnumTypes.ClickType click) {
-        List<String> commandList = (List<String>) data.get("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands");
-        String[] commandSet = new String[commandList.size()];
-        for (int i = 0; i < commandList.size(); i++)
+        final List<String> commandList = (List<String>) data.get("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands");
+        final String[] commandSet = new String[commandList.size()];
+        for (int i = 0; i < commandList.size(); i++) {
             commandSet[i] = "" + (i + 1);
+        }
         return commandSet;
     }
 
@@ -378,9 +395,10 @@ public class DataHandler {
      * @return Returns true if has and false if not
      */
     public boolean hasNoCommands(int npc, EnumTypes.ClickType click) {
-        String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
-        if (data.containsKey(key))
+        final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+        if (data.containsKey(key)) {
             return ((List<String>) data.get(key)).isEmpty();
+        }
         return true;
     }
 
@@ -391,8 +409,10 @@ public class DataHandler {
      * @return True or false depending if it has or not.
      */
     public boolean hasNPCData(int npc) {
-        for (String key : data.keySet()) {
-            if (key.contains("npc-" + npc)) return true;
+        for (final String key : data.keySet()) {
+            if (key.contains("npc-" + npc)) {
+                return true;
+            }
         }
         return false;
     }
@@ -431,11 +451,11 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                List<String> commands = getClickCommandsData(npc, click);
+                final List<String> commands = getClickCommandsData(npc, click);
 
                 commands.remove(commandID - 1);
 
-                String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+                final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
                 data.replace(key, commands);
                 dataConfigurator.set(key, commands);
 
@@ -465,7 +485,7 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                List<String> commandsData = getClickCommandsData(npc, click);
+                final List<String> commandsData = getClickCommandsData(npc, click);
 
                 final String typeText;
                 switch (type) {
@@ -485,7 +505,7 @@ public class DataHandler {
                         typeText = "";
                 }
 
-                String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+                final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
                 data.replace(key, commandsData);
                 dataConfigurator.set(key, commandsData);
 
@@ -510,7 +530,9 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                if (dataConfigurator.contains("npc-data.npc-" + npc)) dataConfigurator.set("npc-data.npc-" + npc, null);
+                if (dataConfigurator.contains("npc-data.npc-" + npc)) {
+                    dataConfigurator.set("npc-data.npc-" + npc, null);
+                }
 
                 data.keySet().removeIf(key -> key.contains("npc-data.npc-" + npc));
 
@@ -533,11 +555,11 @@ public class DataHandler {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                Map<String, Object> newNpcData = new HashMap<>();
+                final Map<String, Object> newNpcData = new HashMap<>();
 
-                for (String key : data.keySet()) {
+                for (final String key : data.keySet()) {
                     if (key.contains("npc-" + npc)) {
-                        String newKey = key.replace("npc-" + npc, "npc-" + npcClone);
+                        final String newKey = key.replace("npc-" + npc, "npc-" + npcClone);
                         newNpcData.put(newKey, data.get(key));
                         dataConfigurator.set(newKey, data.get(key));
                     }
@@ -557,12 +579,13 @@ public class DataHandler {
      * @return The cached cooldowns
      */
     Map<String, Integer> getCachedCooldownByID() {
-        Map<String, Integer> cachedData = new HashMap<>();
+        final Map<String, Integer> cachedData = new HashMap<>();
 
-        for (String key : data.keySet()) {
-            String[] components = key.split("\\.");
-            if (components[2].equalsIgnoreCase("cooldown"))
+        for (final String key : data.keySet()) {
+            final String[] components = key.split("\\.");
+            if (components[2].equalsIgnoreCase("cooldown")) {
                 cachedData.put(components[1], (Integer) data.get(key));
+            }
         }
         return cachedData;
     }

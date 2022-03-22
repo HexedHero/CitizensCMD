@@ -18,20 +18,21 @@
 
 package me.mattstudios.citizenscmd.listeners;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static net.kyori.adventure.text.Component.newline;
-import static net.kyori.adventure.text.Component.text;
 
 public class UpdateEvent implements Listener {
 
@@ -43,7 +44,9 @@ public class UpdateEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!plugin.isUpdateStatus() || !event.getPlayer().hasPermission("citizenscmd.update")) return;
+        if (!plugin.isUpdateStatus() || !event.getPlayer().hasPermission("citizenscmd.update")) {
+            return;
+        }
 
         final Audience audience = plugin.getAudiences().player(event.getPlayer());
 
@@ -54,11 +57,11 @@ public class UpdateEvent implements Listener {
         builder.append(newline());
         builder.append(
                 Component.text()
-                        .append(plugin.getLang().getMessage(Messages.DOWNLOAD_AT))
-                        .append(text(" spigotmc.org/resources/citizens-CMD.30224/"))
-                        .clickEvent(ClickEvent.openUrl("https://spigotmc.org/resources/citizens-CMD.30224/"))
-                        .build()
-        );
+                .append(plugin.getLang().getMessage(Messages.DOWNLOAD_AT))
+                .append(text(" spigotmc.org/resources/citizens-CMD.30224/"))
+                .clickEvent(ClickEvent.openUrl("https://spigotmc.org/resources/citizens-CMD.30224/"))
+                .build()
+                );
 
         audience.sendMessage(builder.build());
     }

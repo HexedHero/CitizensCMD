@@ -18,11 +18,12 @@
 
 package me.mattstudios.citizenscmd.schedulers;
 
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class ConfirmScheduler extends BukkitRunnable {
 

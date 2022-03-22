@@ -1,5 +1,9 @@
 package me.mattstudios.citizenscmd.commands;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+
+import org.bukkit.command.CommandSender;
+
 import ch.jalu.configme.SettingsManager;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -8,9 +12,6 @@ import me.mattstudios.citizenscmd.Settings;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 
 public class ReloadCommand extends Npcmd {
 

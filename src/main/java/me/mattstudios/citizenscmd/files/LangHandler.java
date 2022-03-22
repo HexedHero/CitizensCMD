@@ -18,14 +18,8 @@
 
 package me.mattstudios.citizenscmd.files;
 
-import ch.jalu.configme.SettingsManager;
-import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.Settings;
-import me.mattstudios.citizenscmd.utility.Messages;
-import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
+import static me.mattstudios.citizenscmd.utility.Util.MINI;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +29,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
-import static me.mattstudios.citizenscmd.utility.Util.MINI;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import ch.jalu.configme.SettingsManager;
+import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.Settings;
+import me.mattstudios.citizenscmd.utility.Messages;
+import net.kyori.adventure.text.Component;
 
 public class LangHandler {
 
@@ -58,8 +59,8 @@ public class LangHandler {
      */
     private void cacheMessage() {
         try {
-            File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
-            FileConfiguration langConf = new YamlConfiguration();
+            final File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
+            final FileConfiguration langConf = new YamlConfiguration();
             // InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
 
             if (!langFile.exists()) {
@@ -68,8 +69,8 @@ public class LangHandler {
 
             langConf.load(langFile);
 
-            for (String parent : Objects.requireNonNull(langConf.getConfigurationSection("messages")).getKeys(false)) {
-                for (String child : Objects.requireNonNull(langConf.getConfigurationSection("messages." + parent)).getKeys(false)) {
+            for (final String parent : Objects.requireNonNull(langConf.getConfigurationSection("messages")).getKeys(false)) {
+                for (final String child : Objects.requireNonNull(langConf.getConfigurationSection("messages." + parent)).getKeys(false)) {
                     messages.put("messages." + parent + "." + child, langConf.getString("messages." + parent + "." + child));
                 }
             }
@@ -98,7 +99,9 @@ public class LangHandler {
             value = value.replace(entry.getKey(), entry.getValue());
         }
 
-        if (settings.getProperty(Settings.MINIMESSAGE_LANG)) return MINI.deserialize(value);
+        if (settings.getProperty(Settings.MINIMESSAGE_LANG)) {
+            return MINI.deserialize(value);
+        }
         return LEGACY.deserialize(value);
     }
 

@@ -18,11 +18,8 @@
 
 package me.mattstudios.citizenscmd.files;
 
-import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.Util;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.info;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,12 +27,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.info;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.utility.Util;
 
 public class CooldownHandler {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
     private File cooldownsFile;
     private File dir;
 
@@ -51,7 +52,7 @@ public class CooldownHandler {
      * Creates the basic of the class and starts the HashMap
      */
     public void initialize() {
-        File pluginFolder = plugin.getDataFolder();
+        final File pluginFolder = plugin.getDataFolder();
         dir = new File(pluginFolder + "/data");
         cooldownsFile = new File(dir.getPath(), "cooldowns.yml");
         cooldownsConfigurator = new YamlConfiguration();
@@ -65,12 +66,14 @@ public class CooldownHandler {
      * Creates files and folders
      */
     private void createBasics() {
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
 
         if (!cooldownsFile.exists()) {
             try {
                 cooldownsFile.createNewFile();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 info(color("&cError creating cooldowns file.."));
             }
         }
@@ -83,16 +86,18 @@ public class CooldownHandler {
         try {
             cooldownsConfigurator.load(cooldownsFile);
 
-            if (!cooldownsConfigurator.contains("cooldown-data")) return;
+            if (!cooldownsConfigurator.contains("cooldown-data")) {
+                return;
+            }
 
-            Map<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
+            final Map<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
 
-            for (String parent : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data")).getKeys(false)) {
-                for (String child : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent)).getKeys(false)) {
-                    for (String npc : cachedDataFromSaves.keySet()) {
-                        if (npc.equalsIgnoreCase(parent) && ((Util.getSecondsDifference(cooldownsConfigurator.getLong("cooldown-data." + parent + "." + child)) < cachedDataFromSaves.get(npc)) || cachedDataFromSaves.get(npc) == -1))
+            for (final String parent : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data")).getKeys(false)) {
+                for (final String child : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent)).getKeys(false)) {
+                    for (final String npc : cachedDataFromSaves.keySet()) {
+                        if (npc.equalsIgnoreCase(parent) && ((Util.getSecondsDifference(cooldownsConfigurator.getLong("cooldown-data." + parent + "." + child)) < cachedDataFromSaves.get(npc)) || cachedDataFromSaves.get(npc) == -1)) {
                             cooldownData.put("cooldown-data." + parent + "." + child, cooldownsConfigurator.getLong("cooldown-data." + parent + "." + child));
-
+                        }
                     }
                 }
             }
@@ -111,7 +116,7 @@ public class CooldownHandler {
 
             cooldownsConfigurator.set("cooldown-data", null);
 
-            for (String path : cooldownData.keySet()) {
+            for (final String path : cooldownData.keySet()) {
                 cooldownsConfigurator.set(path, cooldownData.get(path));
             }
 
@@ -129,10 +134,11 @@ public class CooldownHandler {
      * @param time the time it was clicked from System.nanoTime();
      */
     public void addInteraction(int npc, String uuid, long time) {
-        if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid))
+        if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid)) {
             cooldownData.replace("cooldown-data.npc-" + npc + "." + uuid, time);
-        else
+        } else {
             cooldownData.put("cooldown-data.npc-" + npc + "." + uuid, time);
+        }
     }
 
     /**
@@ -155,10 +161,11 @@ public class CooldownHandler {
      */
     public boolean onCooldown(int npc, String uuid) {
         if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid)) {
-            if (plugin.getDataHandler().getNPCCooldown(npc) == -1)
+            if (plugin.getDataHandler().getNPCCooldown(npc) == -1) {
                 return true;
-            else
+            } else {
                 return Util.getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)) < plugin.getDataHandler().getNPCCooldown(npc);
+            }
         }
         return false;
     }

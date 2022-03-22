@@ -1,5 +1,13 @@
 package me.mattstudios.citizenscmd.commands;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
+
+import java.util.OptionalInt;
+
+import org.bukkit.command.CommandSender;
+
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
@@ -7,13 +15,6 @@ import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
-
-import java.util.OptionalInt;
-
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
 public class RemoveCommand extends Npcmd {
 
@@ -39,7 +40,7 @@ public class RemoveCommand extends Npcmd {
 
         switch (clickString.toLowerCase()) {
             case "left":
-                int leftCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.LEFT).size();
+                final int leftCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.LEFT).size();
 
                 if (leftCommandSize == 0) {
                     audience.sendMessage(HEADER);
@@ -57,7 +58,7 @@ public class RemoveCommand extends Npcmd {
                 break;
 
             case "right":
-                int rightCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.RIGHT).size();
+                final int rightCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.RIGHT).size();
 
                 if (rightCommandSize == 0) {
                     audience.sendMessage(HEADER);

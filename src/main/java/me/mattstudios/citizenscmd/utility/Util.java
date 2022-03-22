@@ -18,23 +18,6 @@
 
 package me.mattstudios.citizenscmd.utility;
 
-import ch.jalu.configme.SettingsManager;
-import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.Settings;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,6 +27,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import ch.jalu.configme.SettingsManager;
+import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.Settings;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class Util {
 
@@ -95,7 +96,9 @@ public class Util {
      */
     public static OptionalInt getSelectedNpcId(final CommandSender sender) {
         final NPC npc = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
-        if (npc == null) return OptionalInt.empty();
+        if (npc == null) {
+            return OptionalInt.empty();
+        }
         return OptionalInt.of(npc.getId());
     }
 
@@ -168,12 +171,12 @@ public class Util {
      * @param server the server name
      */
     public static void changeServer(CitizensCMD plugin, Player player, String server) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         try {
             dataOutputStream.writeUTF("Connect");
             dataOutputStream.writeUTF(server);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         player.sendPluginMessage(plugin, "BungeeCord", byteArrayOutputStream.toByteArray());
@@ -193,21 +196,21 @@ public class Util {
         String minutePlural = "";
         String secondPlural = "";
 
-        TimeUtil timeUtil = new TimeUtil(seconds);
+        final TimeUtil timeUtil = new TimeUtil(seconds);
 
-        String[] messagesString = new String[4];
+        final String[] messagesString = new String[4];
         messagesString[0] = plugin.getLang().getUncoloredMessage(Messages.SECONDS);
         messagesString[1] = plugin.getLang().getUncoloredMessage(Messages.MINUTES);
         messagesString[2] = plugin.getLang().getUncoloredMessage(Messages.HOURS);
         messagesString[3] = plugin.getLang().getUncoloredMessage(Messages.DAYS);
 
-        String[] shorts = new String[4];
-        String[] mediums = new String[4];
-        String[] fulls = new String[4];
+        final String[] shorts = new String[4];
+        final String[] mediums = new String[4];
+        final String[] fulls = new String[4];
 
-        Pattern pattern = Pattern.compile("\\[([^]]*)], \\[([^]]*)], \\[([^]]*)]");
+        final Pattern pattern = Pattern.compile("\\[([^]]*)], \\[([^]]*)], \\[([^]]*)]");
         for (int i = 0; i < messagesString.length; i++) {
-            Matcher matcher = pattern.matcher(messagesString[i]);
+            final Matcher matcher = pattern.matcher(messagesString[i]);
             if (matcher.find()) {
                 shorts[i] = matcher.group(1);
                 mediums[i] = matcher.group(2);
@@ -222,13 +225,13 @@ public class Util {
 
         switch (format) {
             case MEDIUM:
-                String[] mediumsAfter = new String[4];
-                String[] mediumsPlurals = new String[4];
-                Pattern patternMediums = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+                final String[] mediumsAfter = new String[4];
+                final String[] mediumsPlurals = new String[4];
+                final Pattern patternMediums = Pattern.compile("([^]]*)\\(([^]]*)\\)");
 
                 for (int i = 0; i < mediums.length; i++) {
                     if (mediums[i].contains("(") && mediums[i].contains(")")) {
-                        Matcher matcher = patternMediums.matcher(mediums[i]);
+                        final Matcher matcher = patternMediums.matcher(mediums[i]);
                         if (matcher.find()) {
                             mediumsAfter[i] = matcher.group(1);
                             mediumsPlurals[i] = matcher.group(2);
@@ -250,13 +253,13 @@ public class Util {
                 break;
 
             case FULL:
-                String[] fullsAfter = new String[4];
-                String[] fullsPlurals = new String[4];
-                Pattern patternFulls = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+                final String[] fullsAfter = new String[4];
+                final String[] fullsPlurals = new String[4];
+                final Pattern patternFulls = Pattern.compile("([^]]*)\\(([^]]*)\\)");
 
                 for (int i = 0; i < fulls.length; i++) {
                     if (fulls[i].contains("(") && fulls[i].contains(")")) {
-                        Matcher matcher = patternFulls.matcher(fulls[i]);
+                        final Matcher matcher = patternFulls.matcher(fulls[i]);
                         if (matcher.find()) {
                             fullsAfter[i] = matcher.group(1);
                             fullsPlurals[i] = matcher.group(2);
@@ -285,7 +288,7 @@ public class Util {
                 break;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
 
         if (timeUtil.getDays() != 0) {
             if (format != DisplayFormat.SHORT) {
@@ -339,8 +342,10 @@ public class Util {
     }
 
     public static boolean soundExists(String soundName) {
-        for (Sound sound : Sound.values()) {
-            if (sound.name().equalsIgnoreCase(soundName)) return true;
+        for (final Sound sound : Sound.values()) {
+            if (sound.name().equalsIgnoreCase(soundName)) {
+                return true;
+            }
         }
 
         return false;

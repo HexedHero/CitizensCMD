@@ -1,12 +1,12 @@
 package me.mattstudios.citizenscmd.updater;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created by GlareMasters on 5/30/2018.
@@ -24,7 +24,7 @@ public class SpigotUpdater {
         this.project = projectID;
         try {
             this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
-        } catch (MalformedURLException ignored) {}
+        } catch (final MalformedURLException ignored) {}
     }
 
     public JavaPlugin getPlugin() {
@@ -38,7 +38,7 @@ public class SpigotUpdater {
      * @throws Exception I/O Exception
      */
     public String getLatestVersion() throws Exception {
-        URLConnection con = checkURL.openConnection();
+        final URLConnection con = checkURL.openConnection();
         this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
         return newVersion;
     }
@@ -59,7 +59,7 @@ public class SpigotUpdater {
      * @throws Exception I/O Exception
      */
     public boolean checkForUpdates() throws Exception {
-        URLConnection con = checkURL.openConnection();
+        final URLConnection con = checkURL.openConnection();
         this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
         return !plugin.getDescription().getVersion().equals(newVersion);
     }

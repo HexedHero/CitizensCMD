@@ -18,14 +18,15 @@
 
 package me.mattstudios.citizenscmd.schedulers;
 
+import org.bukkit.scheduler.BukkitRunnable;
+
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.Settings;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdateScheduler extends BukkitRunnable {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
     public UpdateScheduler(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -36,15 +37,17 @@ public class UpdateScheduler extends BukkitRunnable {
      */
     @Override
     public void run() {
-        if (plugin.getSettings().getProperty(Settings.CHECK_UPDATES)) return;
+        if (plugin.getSettings().getProperty(Settings.CHECK_UPDATES)) {
+            return;
+        }
 
-        SpigotUpdater updater = new SpigotUpdater(plugin, 30224);
+        final SpigotUpdater updater = new SpigotUpdater(plugin, 30224);
         try {
             if (updater.checkForUpdates()) {
                 plugin.setUpdateStatus(true);
                 plugin.setNewVersion(updater.getLatestVersion());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
