@@ -51,7 +51,7 @@ public class Util {
     private Util() {}
 
     public static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
-    public static final MiniMessage MINI = MiniMessage.miniMessage();
+    public static final MiniMessage MINIMESSAGE = MiniMessage.miniMessage();
 
     /**
      * String with CitizensCMD default header and tag

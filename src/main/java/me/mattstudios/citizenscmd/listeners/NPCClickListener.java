@@ -19,7 +19,7 @@
 package me.mattstudios.citizenscmd.listeners;
 
 import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
-import static me.mattstudios.citizenscmd.utility.Util.MINI;
+import static me.mattstudios.citizenscmd.utility.Util.MINIMESSAGE;
 import static me.mattstudios.citizenscmd.utility.Util.getFormattedTime;
 import static org.bukkit.Bukkit.getScheduler;
 
@@ -306,7 +306,7 @@ public class NPCClickListener implements Listener {
                         final Audience audience = plugin.getAudiences().player(player);
 
                         if (plugin.getSettings().getProperty(Settings.MINIMESSAGE)) {
-                            audience.sendMessage(MINI.deserialize(finalMessage));
+                            audience.sendMessage(MINIMESSAGE.deserialize(finalMessage));
                             return;
                         }
 

@@ -19,7 +19,7 @@
 package me.mattstudios.citizenscmd.files;
 
 import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
-import static me.mattstudios.citizenscmd.utility.Util.MINI;
+import static me.mattstudios.citizenscmd.utility.Util.MINIMESSAGE;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +100,7 @@ public class LangHandler {
         }
 
         if (settings.getProperty(Settings.MINIMESSAGE_LANG)) {
-            return MINI.deserialize(value);
+            return MINIMESSAGE.deserialize(value);
         }
         return LEGACY.deserialize(value);
     }
