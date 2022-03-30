@@ -55,16 +55,6 @@ public class Util {
     public static final Component HEADER = LEGACY.deserialize("&c&m-&6&m-&e&m-&a&m-&b&m-&3&l CitizensCMD &b&m-&a&m-&e&m-&6&m-&c&m-");
     public static final Component TAG = LEGACY.deserialize("&f[&3Citizens&cCMD&f]&r ");
 
-    /**
-     * Checks if player has or not selected an NPC
-     *
-     * @param player The player to check if it has any NPC selected or not
-     * @return Returns true if has an NPC selected and false if not
-     */
-    public static boolean npcNotSelectedNM(Player player) {
-        return CitizensAPI.getDefaultNPCSelector().getSelected(player) == null;
-    }
-
     public static void sendNotSelectedMessage(final CitizensCMD plugin, final Audience audience) {
         audience.sendMessage(HEADER);
         audience.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
