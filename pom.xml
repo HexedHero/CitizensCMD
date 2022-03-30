@@ -16,7 +16,7 @@
         <papi.version>2.11.1</papi.version>
         <vault.version>1.7</vault.version>
         <adventure-bukkit.version>4.1.0</adventure-bukkit.version>
-        <minimessage.version>4.10.1</minimessage.version>
+        <adventure.version>4.10.1</adventure.version>
         <configme.version>1.3.0</configme.version>
         <triumph-cmd.version>2.0.0-SNAPSHOT</triumph-cmd.version>
         <bstats.version>3.0.0</bstats.version>
@@ -92,14 +92,14 @@
         <!-- Adventure! -->
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>${adventure-bukkit.version}</version>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>${adventure.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>${minimessage.version}</version>
+            <artifactId>adventure-platform-bukkit</artifactId>
+            <version>${adventure-bukkit.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- Configuration -->

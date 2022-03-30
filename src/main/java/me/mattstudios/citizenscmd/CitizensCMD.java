@@ -186,6 +186,15 @@ public final class CitizensCMD extends JavaPlugin {
         new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
     }
 
+    @Override
+    public void onDisable() {
+        // Clean up Adventure
+        if (audiences != null) {
+            audiences.close();
+            audiences = null;
+        }
+    }
+
     private boolean hasCitizens() {
         return Bukkit.getPluginManager().isPluginEnabled("Citizens");
     }
