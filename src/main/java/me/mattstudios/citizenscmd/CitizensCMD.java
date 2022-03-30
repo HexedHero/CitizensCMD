@@ -21,8 +21,6 @@ package me.mattstudios.citizenscmd;
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
 import static me.mattstudios.citizenscmd.utility.Util.TAG;
-import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.info;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -266,7 +264,7 @@ public final class CitizensCMD extends JavaPlugin {
         try {
             pm.registerEvents(new NPCListener(this), this);
         } catch (final Exception ex) {
-            info(color("&cCould not register clone event, please update your Citizens."));
+            audiences.console().sendMessage(LEGACY.deserialize("&cCould not register clone event, please update your Citizens."));
         }
     }
 

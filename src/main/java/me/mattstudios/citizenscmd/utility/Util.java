@@ -21,17 +21,13 @@ package me.mattstudios.citizenscmd.utility;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.OptionalInt;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,20 +54,6 @@ public class Util {
      */
     public static final Component HEADER = LEGACY.deserialize("&c&m-&6&m-&e&m-&a&m-&b&m-&3&l CitizensCMD &b&m-&a&m-&e&m-&6&m-&c&m-");
     public static final Component TAG = LEGACY.deserialize("&f[&3Citizens&cCMD&f]&r ");
-
-    public static String color(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
-
-    public static void info(String message) {
-        Bukkit.getConsoleSender().sendMessage(message);
-    }
-
-    public static List<String> color(final List<String> messages) {
-        return messages.stream()
-                .map((message) -> ChatColor.translateAlternateColorCodes('&', message))
-                .collect(Collectors.toList());
-    }
 
     /**
      * Checks if player has or not selected an NPC

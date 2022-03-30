@@ -19,8 +19,7 @@
 package me.mattstudios.citizenscmd.files;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
-import static me.mattstudios.citizenscmd.utility.Util.info;
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class DataHandler {
             try {
                 savesFile.createNewFile();
             } catch (final IOException e) {
-                info(color("&cError creating saves file.."));
+                plugin.getAudiences().console().sendMessage(LEGACY.deserialize("&cError creating saves file.."));
             }
         }
     }
