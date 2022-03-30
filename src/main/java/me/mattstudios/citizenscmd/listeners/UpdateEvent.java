@@ -58,8 +58,8 @@ public class UpdateEvent implements Listener {
         builder.append(
                 Component.text()
                 .append(plugin.getLang().getMessage(Messages.DOWNLOAD_AT))
-                .append(text(" spigotmc.org/resources/citizens-CMD.30224/"))
-                .clickEvent(ClickEvent.openUrl("https://spigotmc.org/resources/citizens-CMD.30224/"))
+                .append(text(" spigotmc.org/resources/30224/"))
+                .clickEvent(ClickEvent.openUrl("https://spigotmc.org/resources/30224/"))
                 .build()
                 );
 
