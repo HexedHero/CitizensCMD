@@ -7,6 +7,7 @@
 main: me.mattstudios.citizenscmd.CitizensCMD
 version: ${project.version}
 name: CitizensCMD
+website: https://spigotmc.org/resources/30224/
 authors: [Mateus Moreira, HexedHero]
 softdepend: [Citizens, PlaceholderAPI, Vault]
 api-version: 1.13
