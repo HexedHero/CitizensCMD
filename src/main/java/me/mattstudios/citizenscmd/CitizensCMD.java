@@ -96,20 +96,12 @@ public final class CitizensCMD extends JavaPlugin {
     private String newVersion;
     private DisplayFormat displayFormat;
 
-    private Map<String, Boolean> waitingList;
+    private final Map<String, Boolean> waitingList = new HashMap<>();;
 
     @Override
     public void onEnable() {
-        settings = SettingsManagerBuilder
-                .withYamlFile(Paths.get(getDataFolder().getPath(), "config.yml"))
-                .configurationData(Settings.class)
-                .useDefaultMigrationService()
-                .create();
-
         audiences = BukkitAudiences.create(this);
         final Audience console = audiences.console();
-
-        setLang(settings.getProperty(Settings.LANG));
 
         if (!hasCitizens() && settings.getProperty(Settings.CITIZENS_CHECK)) {
             console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens &7is needed for this plugin to work!")));
@@ -118,40 +110,19 @@ public final class CitizensCMD extends JavaPlugin {
             return;
         }
 
-        commandManager = BukkitCommandManager.create(this);
-
-        final Metrics metrics = new Metrics(this, 2652);
-        Util.setUpMetrics(metrics, settings);
-
+        // Enabling lets go!
         console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion())));
         console.sendMessage(TAG.append(LEGACY.deserialize("&8by &3Mateus Moreira &c@LichtHund &8& Maintained by &3HexedHero")));
 
-        permissionsManager = new PermissionsManager(this);
+        // Settings
+        settings = SettingsManagerBuilder
+                .withYamlFile(Paths.get(getDataFolder().getPath(), "config.yml"))
+                .configurationData(Settings.class)
+                .useDefaultMigrationService()
+                .create();
 
-        dataHandler = new DataHandler(this);
-        dataHandler.initialize();
-
-        cooldownHandler = new CooldownHandler(this);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> cooldownHandler.initialize(), 30L);
-
-        registerCommands();
-        registerEvents();
-
-        console.sendMessage(TAG.append(lang.getMessage(Messages.USING_LANGUAGE)));
-
-        if (hasPAPI()) {
-            console.sendMessage(TAG.append(lang.getMessage(Messages.PAPI_AVAILABLE)));
-            papi = true;
-        }
-
-        if (setupEconomy()) {
-            console.sendMessage(TAG.append(lang.getMessage(Messages.VAULT_AVAILABLE)));
-        }
-
-        waitingList = new HashMap<>();
-
+        setLang(settings.getProperty(Settings.LANG));
         setShift(settings.getProperty(Settings.SHIFT_CONFIRM));
-
         switch (settings.getProperty(Settings.TIME_DISPLAY).toLowerCase()) {
             case "short":
                 displayFormat = DisplayFormat.SHORT;
@@ -161,11 +132,48 @@ public final class CitizensCMD extends JavaPlugin {
                 displayFormat = DisplayFormat.FULL;
                 break;
 
+            case "medium":
             default:
                 displayFormat = DisplayFormat.MEDIUM;
                 break;
         }
+        console.sendMessage(TAG.append(lang.getMessage(Messages.USING_LANGUAGE)));
 
+        // Permissions
+        permissionsManager = new PermissionsManager(this);
+
+        // Commands and Events
+        commandManager = BukkitCommandManager.create(this);
+        registerCommands();
+        registerEvents();
+
+        // Hooks
+        if (hasPAPI()) {
+            console.sendMessage(TAG.append(lang.getMessage(Messages.PAPI_AVAILABLE)));
+            papi = true;
+        }
+
+        if (setupEconomy()) {
+            console.sendMessage(TAG.append(lang.getMessage(Messages.VAULT_AVAILABLE)));
+        }
+
+        // Data
+        dataHandler = new DataHandler(this);
+        cooldownHandler = new CooldownHandler(this);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> { dataHandler.initialize(); cooldownHandler.initialize(); }, 1L);
+
+        // API
+        api = new CitizensCMDAPI(dataHandler);
+
+        // Metrics
+        final Metrics metrics = new Metrics(this, 2652);
+        Util.setUpMetrics(metrics, settings);
+
+        // Tasks
+        new UpdateScheduler(this).runTaskTimerAsynchronously(this, 72000L, 72000L);
+        new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
+
+        // Check for updates
         if (settings.getProperty(Settings.CHECK_UPDATES)) {
             final SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
@@ -179,11 +187,6 @@ public final class CitizensCMD extends JavaPlugin {
             } catch (final Exception ignored) {
             }
         }
-
-        api = new CitizensCMDAPI(dataHandler);
-
-        new UpdateScheduler(this).runTaskTimerAsynchronously(this, 72000L, 72000L);
-        new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
     }
 
     @Override
