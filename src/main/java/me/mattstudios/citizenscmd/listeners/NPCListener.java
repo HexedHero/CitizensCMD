@@ -15,7 +15,7 @@ public class NPCListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void on(NPCCloneEvent event) {
         if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) {
             return;
