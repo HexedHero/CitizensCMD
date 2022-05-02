@@ -48,7 +48,6 @@ import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
-import net.citizensnpcs.api.event.NPCRemoveEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.audience.Audience;
@@ -226,15 +225,6 @@ public class NPCClickListener implements Listener {
         if (!player.hasPermission("citizenscmd.bypass") || plugin.getDataHandler().getNPCCooldown(npc.getId()) != 0) {
             plugin.getCooldownHandler().addInteraction(npc.getId(), player.getUniqueId().toString(), System.currentTimeMillis());
         }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onRemoveNPC(NPCRemoveEvent event) {
-        if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) {
-            return;
-        }
-
-        plugin.getDataHandler().removeNPCData(event.getNPC().getId());
     }
 
     /**
