@@ -103,7 +103,7 @@ public final class CitizensCMD extends JavaPlugin {
         audiences = BukkitAudiences.create(this);
         final Audience console = audiences.console();
 
-        if (!hasCitizens() && settings.getProperty(Settings.CITIZENS_CHECK)) {
+        if (!hasCitizens()) {
             console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens &7is needed for this plugin to work!")));
             console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens.jar &7is not installed on the server!")));
             Bukkit.getPluginManager().disablePlugin(this);

@@ -31,9 +31,6 @@ public final class Settings implements SettingsHolder {
     @Comment({"", "Select cooldown display format, SHORT = 3m 3s | MEDIUM = 3 min 3 sec | FULL - 3 minutes 3 seconds"})
     public static final Property<String> TIME_DISPLAY = PropertyInitializer.newProperty("cooldown-time-display", "MEDIUM");
 
-    @Comment({"", "Disables citizens check on startup"})
-    public static final Property<Boolean> CITIZENS_CHECK = PropertyInitializer.newProperty("citizens-check", true);
-
     @Override
     public void registerComments(final CommentsConfiguration conf) {
         conf.setComment(
