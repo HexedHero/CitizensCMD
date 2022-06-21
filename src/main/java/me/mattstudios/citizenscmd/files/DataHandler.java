@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,10 +44,10 @@ import net.kyori.adventure.audience.Audience;
 public class DataHandler {
 
     private final CitizensCMD plugin;
-    private static File savesFile;
-    private static File dir;
 
-    private static FileConfiguration dataConfigurator;
+    private File savesFile;
+    private File dir;
+    private FileConfiguration dataConfigurator;
 
     private final Map<String, Object> data = new ConcurrentHashMap<>();
 
@@ -90,43 +89,40 @@ public class DataHandler {
      * Caches the data from the file
      */
     private void cacheData() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                dataConfigurator.load(savesFile);
+        try {
+            dataConfigurator.load(savesFile);
 
-                if (!dataConfigurator.contains("npc-data")) {
-                    return;
-                }
-
-                for (final String parent : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data")).getKeys(false)) {
-                    for (final String child : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data." + parent)).getKeys(false)) {
-                        switch (child.toLowerCase()) {
-                            case "permission":
-                                data.put("npc-data." + parent + "." + child, dataConfigurator.getString("npc-data." + parent + "." + child));
-                                break;
-
-                            case "cooldown":
-                                data.put("npc-data." + parent + "." + child, dataConfigurator.getInt("npc-data." + parent + "." + child));
-                                break;
-
-                            case "right-click-commands":
-                            case "left-click-commands":
-                                data.put("npc-data." + parent + "." + child, dataConfigurator.getStringList("npc-data." + parent + "." + child));
-                                break;
-
-                            case "price":
-                                data.put("npc-data." + parent + "." + child, dataConfigurator.getDouble("npc-data." + parent + "." + child));
-                                break;
-                        }
-
-                    }
-                }
-
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
+            if (!dataConfigurator.contains("npc-data")) {
+                return;
             }
 
-        });
+            for (final String parent : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data")).getKeys(false)) {
+                for (final String child : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data." + parent)).getKeys(false)) {
+                    switch (child.toLowerCase()) {
+                        case "permission":
+                            data.put("npc-data." + parent + "." + child, dataConfigurator.getString("npc-data." + parent + "." + child));
+                            break;
+
+                        case "cooldown":
+                            data.put("npc-data." + parent + "." + child, dataConfigurator.getInt("npc-data." + parent + "." + child));
+                            break;
+
+                        case "right-click-commands":
+                        case "left-click-commands":
+                            data.put("npc-data." + parent + "." + child, dataConfigurator.getStringList("npc-data." + parent + "." + child));
+                            break;
+
+                        case "price":
+                            data.put("npc-data." + parent + "." + child, dataConfigurator.getDouble("npc-data." + parent + "." + child));
+                            break;
+                    }
+
+                }
+            }
+
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -139,53 +135,51 @@ public class DataHandler {
      * @param left       If the command should be added to the left or right click
      */
     public void addCommand(int npc, String permission, String command, Audience sender, boolean left) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
-                final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
+            final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
+            final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
 
-                if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
-                    data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
-                    dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
-                }
-
-                if (left) {
-                    commandListLeft.add("[" + permission + "] " + command);
-                } else {
-                    commandList.add("[" + permission + "] " + command);
-                }
-
-                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
-                    data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                } else {
-                    data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                }
-                dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
-
-                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
-                    data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                } else {
-                    data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                }
-                dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-
-                if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
-                    data.put("npc-data.npc-" + npc + ".price", 0);
-                    dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
-                }
-
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
+            if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
+                data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
+                dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
             }
-        });
+
+            if (left) {
+                commandListLeft.add("[" + permission + "] " + command);
+            } else {
+                commandList.add("[" + permission + "] " + command);
+            }
+
+            if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
+                data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
+            } else {
+                data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
+            }
+            dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
+
+            if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
+                data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+            } else {
+                data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+            }
+            dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+
+            if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
+                data.put("npc-data.npc-" + npc + ".price", 0);
+                dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
+            }
+
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
+
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
+        }
     }
 
     /**
@@ -197,48 +191,46 @@ public class DataHandler {
      * @param left       If the command should be added to the left or right click
      */
     public void addCommand(int npc, String permission, String command, boolean left) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
-                final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
+            final List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
+            final List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
 
-                if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
-                    data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
-                    dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
-                }
-
-                if (left) {
-                    commandListLeft.add("[" + permission + "] " + command);
-                } else {
-                    commandList.add("[" + permission + "] " + command);
-                }
-
-                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
-                    data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                } else {
-                    data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
-                }
-                dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
-
-                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
-                    data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                } else {
-                    data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-                }
-                dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
-
-                if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
-                    data.put("npc-data.npc-" + npc + ".price", 0);
-                    dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
-                }
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException ignored) {
+            if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
+                data.put("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
+                dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", Util.getDefaultCooldown(plugin));
             }
-        });
+
+            if (left) {
+                commandListLeft.add("[" + permission + "] " + command);
+            } else {
+                commandList.add("[" + permission + "] " + command);
+            }
+
+            if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands")) {
+                data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
+            } else {
+                data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
+            }
+            dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
+
+            if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands")) {
+                data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+            } else {
+                data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+            }
+            dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+
+            if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
+                data.put("npc-data.npc-" + npc + ".price", 0);
+                dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
+            }
+
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException ignored) {
+        }
     }
 
     /**
@@ -249,24 +241,22 @@ public class DataHandler {
      * @param sender   The player who run the command
      */
     public void setCooldown(int npc, int cooldown, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", cooldown);
+            dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", cooldown);
 
-                data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
+            data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
 
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
-            }
-        });
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
+        }
     }
 
     /**
@@ -277,23 +267,21 @@ public class DataHandler {
      * @param sender The player who run the command
      */
     public void setPrice(int npc, double price, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                dataConfigurator.set("npc-data.npc-" + npc + ".price", price);
+            dataConfigurator.set("npc-data.npc-" + npc + ".price", price);
 
-                data.replace("npc-data.npc-" + npc + ".price", price);
+            data.replace("npc-data.npc-" + npc + ".price", price);
 
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
 
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
-        });
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -304,23 +292,21 @@ public class DataHandler {
      * @param sender     The player who run the command
      */
     public void setCustomPermission(int npc, String permission, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                dataConfigurator.set("npc-data.npc-" + npc + ".permission", permission);
+            dataConfigurator.set("npc-data.npc-" + npc + ".permission", permission);
 
-                data.replace("npc-data.npc-" + npc + ".permission", permission);
+            data.replace("npc-data.npc-" + npc + ".permission", permission);
 
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
 
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
-        });
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -330,25 +316,23 @@ public class DataHandler {
      * @param sender The player who run the command
      */
     public void removeCustomPermission(int npc, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                if (dataConfigurator.contains("npc-data.npc-" + npc + ".permission")) {
-                    dataConfigurator.set("npc-data.npc-" + npc + ".permission", null);
-                }
-
-                data.remove("npc-data.npc-" + npc + ".permission");
-
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
+            if (dataConfigurator.contains("npc-data.npc-" + npc + ".permission")) {
+                dataConfigurator.set("npc-data.npc-" + npc + ".permission", null);
             }
-        });
+
+            data.remove("npc-data.npc-" + npc + ".permission");
+
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
+
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getCustomPermission(int npc) {
@@ -445,27 +429,25 @@ public class DataHandler {
      * @param sender    The player to send the message to
      */
     public void removeCommand(int npc, int commandID, EnumTypes.ClickType click, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                final List<String> commands = getClickCommandsData(npc, click);
+            final List<String> commands = getClickCommandsData(npc, click);
 
-                commands.remove(commandID - 1);
+            commands.remove(commandID - 1);
 
-                final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
-                data.replace(key, commands);
-                dataConfigurator.set(key, commands);
+            final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+            data.replace(key, commands);
+            dataConfigurator.set(key, commands);
 
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
 
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
-        });
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -479,43 +461,41 @@ public class DataHandler {
      * @param sender    The player to send messages
      */
     public void edit(int npc, int commandID, EnumTypes.ClickType click, EnumTypes.EditType type, String newValue, Audience sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                final List<String> commandsData = getClickCommandsData(npc, click);
+            final List<String> commandsData = getClickCommandsData(npc, click);
 
-                final String typeText;
-                switch (type) {
-                    case CMD:
-                        String tempCommand = commandsData.get(commandID - 1);
-                        tempCommand = tempCommand.replaceAll(" ([^]]*)", " " + newValue);
-                        commandsData.set(commandID - 1, tempCommand);
-                        typeText = "CMD";
-                        break;
-                    case PERM:
-                        String tempPerm = commandsData.get(commandID - 1);
-                        tempPerm = tempPerm.replaceAll("\\[([^]]*)]", "[" + newValue + "]");
-                        commandsData.set(commandID - 1, tempPerm);
-                        typeText = "PERM";
-                        break;
-                    default:
-                        typeText = "";
-                }
-
-                final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
-                data.replace(key, commandsData);
-                dataConfigurator.set(key, commandsData);
-
-                sender.sendMessage(HEADER);
-                sender.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND, "{type}", typeText));
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
+            final String typeText;
+            switch (type) {
+                case CMD:
+                    String tempCommand = commandsData.get(commandID - 1);
+                    tempCommand = tempCommand.replaceAll(" ([^]]*)", " " + newValue);
+                    commandsData.set(commandID - 1, tempCommand);
+                    typeText = "CMD";
+                    break;
+                case PERM:
+                    String tempPerm = commandsData.get(commandID - 1);
+                    tempPerm = tempPerm.replaceAll("\\[([^]]*)]", "[" + newValue + "]");
+                    commandsData.set(commandID - 1, tempPerm);
+                    typeText = "PERM";
+                    break;
+                default:
+                    typeText = "";
             }
-        });
+
+            final String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+            data.replace(key, commandsData);
+            dataConfigurator.set(key, commandsData);
+
+            sender.sendMessage(HEADER);
+            sender.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND, "{type}", typeText));
+
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -524,22 +504,20 @@ public class DataHandler {
      * @param npc the NPC id
      */
     public void removeNPCData(int npc) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                if (dataConfigurator.contains("npc-data.npc-" + npc)) {
-                    dataConfigurator.set("npc-data.npc-" + npc, null);
-                }
-
-                data.keySet().removeIf(key -> key.contains("npc-data.npc-" + npc));
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
+            if (dataConfigurator.contains("npc-data.npc-" + npc)) {
+                dataConfigurator.set("npc-data.npc-" + npc, null);
             }
-        });
+
+            data.keySet().removeIf(key -> key.contains("npc-data.npc-" + npc));
+
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -549,27 +527,25 @@ public class DataHandler {
      * @param npcClone The ID of the new NPC.
      */
     public void cloneData(int npc, int npcClone) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
+        try {
+            createBasics();
+            dataConfigurator.load(savesFile);
 
-                final Map<String, Object> newNpcData = new HashMap<>();
+            final Map<String, Object> newNpcData = new HashMap<>();
 
-                for (final String key : data.keySet()) {
-                    if (key.contains("npc-" + npc)) {
-                        final String newKey = key.replace("npc-" + npc, "npc-" + npcClone);
-                        newNpcData.put(newKey, data.get(key));
-                        dataConfigurator.set(newKey, data.get(key));
-                    }
+            for (final String key : data.keySet()) {
+                if (key.contains("npc-" + npc)) {
+                    final String newKey = key.replace("npc-" + npc, "npc-" + npcClone);
+                    newNpcData.put(newKey, data.get(key));
+                    dataConfigurator.set(newKey, data.get(key));
                 }
-
-                data.putAll(newNpcData);
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
             }
-        });
+
+            data.putAll(newNpcData);
+            dataConfigurator.save(savesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

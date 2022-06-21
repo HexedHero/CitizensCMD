@@ -114,6 +114,12 @@ public final class CitizensCMD extends JavaPlugin {
         console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion())));
         console.sendMessage(TAG.append(LEGACY.deserialize("&8by &3Mateus Moreira &c@LichtHund &8& Maintained by &3HexedHero")));
 
+        // Data
+        dataHandler = new DataHandler(this);
+        cooldownHandler = new CooldownHandler(this);
+        dataHandler.initialize();
+        cooldownHandler.initialize();
+
         // Settings
         settings = SettingsManagerBuilder
                 .withYamlFile(Paths.get(getDataFolder().getPath(), "config.yml"))
@@ -156,11 +162,6 @@ public final class CitizensCMD extends JavaPlugin {
         if (setupEconomy()) {
             console.sendMessage(TAG.append(lang.getMessage(Messages.VAULT_AVAILABLE)));
         }
-
-        // Data
-        dataHandler = new DataHandler(this);
-        cooldownHandler = new CooldownHandler(this);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> { dataHandler.initialize(); cooldownHandler.initialize(); }, 1L);
 
         // API
         api = new CitizensCMDAPI(dataHandler);

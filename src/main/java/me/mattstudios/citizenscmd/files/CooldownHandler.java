@@ -36,9 +36,9 @@ import me.mattstudios.citizenscmd.utility.Util;
 public class CooldownHandler {
 
     private final CitizensCMD plugin;
+
     private File cooldownsFile;
     private File dir;
-
     private FileConfiguration cooldownsConfigurator;
 
     private final Map<String, Long> cooldownData = new ConcurrentHashMap<>();
