@@ -38,9 +38,12 @@ public class ReloadCommand extends Npcmd {
             case "short":
                 plugin.setDisplayFormat(DisplayFormat.SHORT);
                 break;
+
             case "full":
                 plugin.setDisplayFormat(DisplayFormat.FULL);
                 break;
+
+            case "medium":
             default:
                 plugin.setDisplayFormat(DisplayFormat.MEDIUM);
                 break;

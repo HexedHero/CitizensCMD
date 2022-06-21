@@ -86,7 +86,7 @@ public final class CitizensCMD extends JavaPlugin {
     private static CitizensCMDAPI api;
     private static Economy economy;
 
-    private boolean papi = false;
+    private boolean usePAPI = false;
     private BukkitCommandManager<CommandSender> commandManager;
     private SettingsManager settings;
 
@@ -96,19 +96,13 @@ public final class CitizensCMD extends JavaPlugin {
     private String newVersion;
     private DisplayFormat displayFormat;
 
-    private final Map<String, Boolean> waitingList = new HashMap<>();;
+    private final Map<String, Boolean> waitingList = new HashMap<>();
 
     @Override
     public void onEnable() {
+        // Init setup
         audiences = BukkitAudiences.create(this);
         final Audience console = audiences.console();
-
-        if (!hasCitizens()) {
-            console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens &7is needed for this plugin to work!")));
-            console.sendMessage(TAG.append(LEGACY.deserialize("&cCitizens.jar &7is not installed on the server!")));
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
 
         // Enabling lets go!
         console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion())));
@@ -154,9 +148,9 @@ public final class CitizensCMD extends JavaPlugin {
         registerEvents();
 
         // Hooks
-        if (hasPAPI()) {
+        if (isPAPIEnabled()) {
             console.sendMessage(TAG.append(lang.getMessage(Messages.PAPI_AVAILABLE)));
-            papi = true;
+            usePAPI = true;
         }
 
         if (setupEconomy()) {
@@ -199,16 +193,12 @@ public final class CitizensCMD extends JavaPlugin {
         }
     }
 
-    private boolean hasCitizens() {
-        return Bukkit.getPluginManager().isPluginEnabled("Citizens");
-    }
-
     /**
      * Checks if PAPI is installed or not on the server
      *
      * @return Returns true if PAPI is found and false if not
      */
-    private boolean hasPAPI() {
+    private boolean isPAPIEnabled() {
         return Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
@@ -330,7 +320,7 @@ public final class CitizensCMD extends JavaPlugin {
      * @return Returns true if PAPI is being used
      */
     public boolean papiEnabled() {
-        return papi;
+        return usePAPI;
     }
 
     /**
