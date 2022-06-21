@@ -66,8 +66,8 @@ public class NPCClickListener implements Listener {
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onRightClick(NPCRightClickEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onNPCRightClick(NPCRightClickEvent event) {
         final NPC npc = event.getNPC();
         final Player player = event.getClicker();
         final Audience audience = plugin.getAudiences().player(player);
@@ -149,8 +149,8 @@ public class NPCClickListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onLeftClick(NPCLeftClickEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onNPCLeftClick(NPCLeftClickEvent event) {
         final NPC npc = event.getNPC();
         final Player player = event.getClicker();
         final Audience audience = plugin.getAudiences().player(player);

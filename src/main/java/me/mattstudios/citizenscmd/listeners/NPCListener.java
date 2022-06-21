@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import net.citizensnpcs.api.event.NPCCloneEvent;
-import net.citizensnpcs.api.event.NPCRemoveEvent;
+import net.citizensnpcs.api.event.NPCRemoveByCommandSenderEvent;
 
 public class NPCListener implements Listener {
 
@@ -16,8 +16,8 @@ public class NPCListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onCloneNPC(NPCCloneEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onNPCClone(NPCCloneEvent event) {
         if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) {
             return;
         }
@@ -25,8 +25,8 @@ public class NPCListener implements Listener {
         plugin.getDataHandler().cloneData(event.getNPC().getId(), event.getClone().getId());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onRemoveNPC(NPCRemoveEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onNPCRemove(NPCRemoveByCommandSenderEvent event) {
         if (!plugin.getDataHandler().hasNPCData(event.getNPC().getId())) {
             return;
         }

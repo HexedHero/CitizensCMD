@@ -262,12 +262,12 @@ public final class CitizensCMD extends JavaPlugin {
     private void registerEvents() {
         final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new UpdateEvent(this), this);
-        pm.registerEvents(new NPCClickListener(this), this);
 
         try {
+            pm.registerEvents(new NPCClickListener(this), this);
             pm.registerEvents(new NPCListener(this), this);
         } catch (final Exception ex) {
-            audiences.console().sendMessage(LEGACY.deserialize("&cCould not register clone event, please update your Citizens."));
+            audiences.console().sendMessage(TAG.append(LEGACY.deserialize("&cCould not register NPC events, please update your Citizens plugin!")));
         }
     }
 

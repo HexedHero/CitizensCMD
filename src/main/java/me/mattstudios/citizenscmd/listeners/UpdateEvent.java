@@ -42,7 +42,7 @@ public class UpdateEvent implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (!plugin.isUpdateStatus() || !event.getPlayer().hasPermission("citizenscmd.update")) {
             return;

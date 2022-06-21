@@ -19,7 +19,6 @@
 package me.mattstudios.citizenscmd.files;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +79,7 @@ public class DataHandler {
             try {
                 savesFile.createNewFile();
             } catch (final IOException e) {
-                plugin.getAudiences().console().sendMessage(LEGACY.deserialize("&cError creating saves file.."));
+                e.printStackTrace();
             }
         }
     }
@@ -229,7 +228,8 @@ public class DataHandler {
             }
 
             dataConfigurator.save(savesFile);
-        } catch (IOException | InvalidConfigurationException ignored) {
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
         }
     }
 
