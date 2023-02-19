@@ -66,7 +66,7 @@ public class RemoveCommand extends Npcmd {
                     return;
                 }
 
-                if (id < 0 || id > rightCommandSize) {
+                if (id < 1 || id > rightCommandSize) {
                     audience.sendMessage(HEADER);
                     audience.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
