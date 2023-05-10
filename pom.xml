@@ -13,13 +13,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.19.4-R0.1-SNAPSHOT</spigot.version>
         <citizens.version>2.0.31-SNAPSHOT</citizens.version>
-        <papi.version>2.11.2</papi.version>
+        <papi.version>2.11.3</papi.version>
         <vault.version>1.7</vault.version>
-        <adventure.version>4.13.0</adventure.version>
-        <adventure-bukkit.version>4.2.0</adventure-bukkit.version>
+        <adventure.version>4.13.1</adventure.version>
+        <adventure-bukkit.version>4.3.0</adventure-bukkit.version>
         <configme.version>1.3.0</configme.version>
         <triumph-cmd.version>2.0.0-SNAPSHOT</triumph-cmd.version>
-        <bstats.version>3.0.1</bstats.version>
+        <bstats.version>3.0.2</bstats.version>
     </properties>
 
     <repositories>
