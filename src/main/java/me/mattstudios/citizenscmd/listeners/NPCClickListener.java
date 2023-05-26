@@ -143,7 +143,7 @@ public class NPCClickListener implements Listener {
 
         doCommands(npc, player, EnumTypes.ClickType.RIGHT);
 
-        if (!player.hasPermission("citizenscmd.bypass") || plugin.getDataHandler().getNPCCooldown(npc.getId()) != 0) {
+        if (!player.hasPermission("citizenscmd.bypass") && plugin.getDataHandler().getNPCCooldown(npc.getId()) != 0) {
             plugin.getCooldownHandler().addInteraction(npc.getId(), player.getUniqueId().toString(), System.currentTimeMillis());
         }
 
@@ -222,7 +222,7 @@ public class NPCClickListener implements Listener {
 
         doCommands(npc, player, EnumTypes.ClickType.LEFT);
 
-        if (!player.hasPermission("citizenscmd.bypass") || plugin.getDataHandler().getNPCCooldown(npc.getId()) != 0) {
+        if (!player.hasPermission("citizenscmd.bypass") && plugin.getDataHandler().getNPCCooldown(npc.getId()) != 0) {
             plugin.getCooldownHandler().addInteraction(npc.getId(), player.getUniqueId().toString(), System.currentTimeMillis());
         }
     }
