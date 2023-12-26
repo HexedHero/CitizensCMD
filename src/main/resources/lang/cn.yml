@@ -1,0 +1,71 @@
+# Citizens CMD 插件 由 Mateus Moreira 开发
+# @LichtHund
+# 版本 ${project.version}
+#
+# 根据需要进行修改。
+# 谨慎删除占位符！
+# 有些占位符可以删除，但可能无法正常工作
+# 冷却时间占位符可以安全删除
+messages:
+  start-up:
+    using-language: "&7使用&a简体中文&7消息！"
+    new-version: "&cCitizensCMD 现已有新版本发布："
+    papi-available: "&7使用&aPlaceholderAPI&7！"
+    vault-available: "&7使用&aVault&7！"
+  commands:
+    npc-add-command-added: "&a成功向NPC添加了命令！"
+    npc-add-command-failed: "&c无法向NPC添加命令！"
+    npc-add-command-delay-failed: "&c在添加 &d-d &c时，延迟必须是一个数字！"
+    npc-cooldown-set: "&a成功设置了冷却时间！"
+    npc-cooldown-error: "&c设置冷却时间时发生错误！"
+    npc-price-set: "&a成功设置了价格！"
+    list-commands-counter-right: "&c&o{count} &7&o- 右键点击命令："
+    list-commands-counter-left: "&c&o{count} &7&o- 左键点击命令："
+    list-cooldown: "&7冷却时间：&c"
+    list-price: "&7价格：&c"
+    list-tooltip: "&7点击以编辑！"
+    reload-command: "&a所有文件已成功重新加载！"
+    removed-command: "&a命令已成功移除！"
+    edit-command: "&a{type}已成功编辑！"
+    set-permission: "&a权限设置成功！"
+    remove-permission: "&a权限已成功移除！"
+  warnings:
+    no-npc-selected: "&c执行该命令时必须选择一个NPC！"
+    invalid-number: "&c输入的值不是一个数字！"
+    invalid-id: "&c请提供一个有效的命令ID！"
+    invalid-click-type: "&c您必须选择左键或右键！"
+    no-commands: "&c该NPC没有更多命令！"
+    invalid-arguments: "&c您必须选择 CMD 或 PERM！"
+    invalid-permission: "&c权限不能包含空格！"
+    console-not-allowed: "&c此命令不能在控制台执行，只能在游戏内执行！"
+    no-permission: "&c您没有执行此命令的权限！"
+    wrong-usage: "&c命令使用错误！&7请输入 /npcmd 获取帮助！"
+    new-version: "&7有新版本可用：&cv"
+    download-at: "&7在此处下载"
+  npc:
+    on-cooldown: "&7请等待 &c{time} &7再次使用此NPC！"
+    one-time-click: "&7此NPC只允许使用一次！"
+    pay-confirm: "&7要使用此NPC，您必须支付&a{price}$&c！\n&a{shift}右键确认&7或&c{shift}左键取消\n&8此操作将在&c15&8秒后取消！"
+    pay-canceled: "&c支付已取消！"
+    pay-no-money: "&c您的账户没有足够的金钱！"
+    pay-completed: "&a您的账户扣除了{price}$！"
+    message-display: "{name}:&r"
+  help:
+    version: "&7&o版本："
+    info: "&7将鼠标悬停在命令上可以查看更多信息和示例！"
+    example: "&8示例："
+    description-add: "&7向NPC添加命令。"
+    description-cooldown: "&7设置NPC的点击冷却时间，以秒为单位。"
+    description-price: "&7设置使用NPC的价格。"
+    description-list: "&7显示当前NPC的命令列表。"
+    description-edit: "&7编辑特定的命令或权限。"
+    description-remove: "&7从NPC中删除命令。"
+    description-reload: "&7重新加载所有文件。"
+
+# 重要！
+# 不要更改此模式，只更改“[]”内部的文本，“()”表示复数
+  time-format:
+    seconds: "[秒], [秒], [秒]"
+    minutes: "[分钟], [分钟], [分钟]"
+    hours: "[小时], [小时], [小时]"
+    days: "[天], [天], [天]"
