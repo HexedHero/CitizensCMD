@@ -46,8 +46,7 @@ public class PermissionsManager {
     public void setPermission(Player player, String permission) {
         final PermissionAttachment permissionAttachment = player.addAttachment(plugin);
         permissionsData.put(player.getUniqueId(), permissionAttachment);
-        final PermissionAttachment permissionAttachment1 = permissionsData.get(player.getUniqueId());
-        permissionAttachment1.setPermission(permission, true);
+        permissionAttachment.setPermission(permission, true);
     }
 
     /**
@@ -57,7 +56,10 @@ public class PermissionsManager {
      * @param permission The permission node to be removed
      */
     public void unsetPermission(Player player, String permission) {
-        permissionsData.get(player.getUniqueId()).unsetPermission(permission);
+        PermissionAttachment attachment = permissionsData.remove(player.getUniqueId());
+        if (attachment != null) {
+            attachment.unsetPermission(permission);
+        }
     }
 
 }
