@@ -13,7 +13,7 @@ public final class Settings implements SettingsHolder {
     @Comment({"", "Enables Checking for update."})
     public static final Property<Boolean> CHECK_UPDATES = PropertyInitializer.newProperty("check-updates", true);
 
-    @Comment({"", "Available languages EN, PT, BG, RO, NO, CH"})
+    @Comment({"", "Available languages EN, PT, BG, RO, NO, CH, CN, CS, FR, JA"})
     public static final Property<String> LANG = PropertyInitializer.newProperty("lang", "EN");
 
     @Comment({"", "Toggle this on to enable using Minimessage style for message commands.", "https://docs.adventure.kyori.net/minimessage/format.html"})
