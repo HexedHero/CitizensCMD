@@ -39,7 +39,9 @@ public class SpigotUpdater {
      */
     public String getLatestVersion() throws Exception {
         final URLConnection con = checkURL.openConnection();
-        this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            this.newVersion = reader.readLine();
+        }
         return newVersion;
     }
 
@@ -60,7 +62,9 @@ public class SpigotUpdater {
      */
     public boolean checkForUpdates() throws Exception {
         final URLConnection con = checkURL.openConnection();
-        this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            this.newVersion = reader.readLine();
+        }
         return !plugin.getDescription().getVersion().equals(newVersion);
     }
 }
