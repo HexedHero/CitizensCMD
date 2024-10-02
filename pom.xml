@@ -11,15 +11,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.20.6-R0.1-SNAPSHOT</spigot.version>
-        <citizens.version>2.0.34-SNAPSHOT</citizens.version>
-        <papi.version>2.11.5</papi.version>
+        <spigot.version>1.21.1-R0.1-SNAPSHOT</spigot.version>
+        <citizens.version>2.0.35-SNAPSHOT</citizens.version>
+        <papi.version>2.11.6</papi.version>
         <vault.version>1.7</vault.version>
         <adventure.version>4.17.0</adventure.version>
-        <adventure-bukkit.version>4.3.2</adventure-bukkit.version>
+        <adventure-bukkit.version>4.3.4</adventure-bukkit.version>
         <configme.version>1.4.1</configme.version>
         <triumph-cmd.version>2.0.0-SNAPSHOT</triumph-cmd.version>
-        <bstats.version>3.0.2</bstats.version>
+        <bstats.version>3.1.0</bstats.version>
     </properties>
 
     <repositories>
