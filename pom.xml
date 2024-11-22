@@ -11,8 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.21.1-R0.1-SNAPSHOT</spigot.version>
-        <citizens.version>2.0.35-SNAPSHOT</citizens.version>
+        <spigot.version>1.21.3-R0.1-SNAPSHOT</spigot.version>
+        <citizens.version>2.0.36-SNAPSHOT</citizens.version>
         <papi.version>2.11.6</papi.version>
         <vault.version>1.7</vault.version>
         <adventure.version>4.17.0</adventure.version>
